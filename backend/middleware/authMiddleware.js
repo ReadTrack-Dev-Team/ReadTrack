@@ -1,23 +1,23 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-exports.protect = (req, res, next) => {
+exports.protect = async (req, res, next) => {
   const authHeader = req.headers.authorization || '';
-  const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
-
-  if (!token) return res.status(401).json({ message: "Not authorized" });
+  const token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+  if (!token) return res.status(401).json({ message: 'Not authorized, token missing' });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // contains id and role
+    // optionally fetch full user:
+    req.user = { id: decoded.id, role: decoded.role, email: decoded.email };
     next();
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
+  } catch(err) {
+    return res.status(401).json({ message: 'Token invalid or expired' });
   }
 };
 
 exports.adminOnly = (req, res, next) => {
-  if (!req.user || req.user.role !== "admin") {
-    return res.status(403).json({ message: "Admin only" });
-  }
+  if (!req.user) return res.status(401).json({ message: 'Not authorized' });
+  if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin only' });
   next();
 };
