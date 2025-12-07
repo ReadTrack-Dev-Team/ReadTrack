@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 
@@ -25,19 +26,16 @@ exports.registerUser = async (req, res) => {
 
 // Login
 exports.loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ message: 'All fields required' });
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+  const isMatch = await user.comparePassword(password); // bcrypt check
+  if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    const isMatch = await user.matchPassword(password);
-    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+  const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+    expiresIn: '1d'
+  });
 
-    const token = generateToken(user);
-    res.json({ message: 'Login successful', user: { id: user._id, name: user.name, email: user.email, role: user.role }, token });
-  } catch(err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
-  }
+  res.json({ token, user });
 };
