@@ -2,33 +2,33 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
 
-export default function BookList() {
+export default function ReadingList() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBooks = async () => {
+    const getReadingList = async () => {
       try {
-        const res = await api.get("/books");
+        const res = await api.get("/books/reading-list");
         setBooks(res.data);
       } catch (err) {
-        console.error("Error fetching books:", err);
+        console.error("Error fetching reading list:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBooks();
+    getReadingList();
   }, []);
 
-  if (loading) return <p style={{ textAlign: "center" }}>Loading books...</p>;
+  if (loading) return <p style={{ textAlign: "center" }}>Loading reading list...</p>;
 
   return (
     <div style={{ maxWidth: 700, margin: "40px auto", textAlign: "center" }}>
-      <h2>📚 All Books</h2>
+      <h2>📖 My Reading List</h2>
 
       {books.length === 0 ? (
-        <p>No books available yet.</p>
+        <p>Your reading list is empty.</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
           {books.map((book) => (
@@ -49,13 +49,6 @@ export default function BookList() {
                   style={{ marginRight: 10, color: "blue" }}
                 >
                   View
-                </Link>
-
-                <Link
-                  to={`/books/${book._id}/edit`}
-                  style={{ marginLeft: 10, color: "green" }}
-                >
-                  Edit
                 </Link>
               </div>
             </li>
