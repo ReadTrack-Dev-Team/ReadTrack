@@ -6,7 +6,18 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['user','admin'], default: 'user' },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  readingList: [
+    {
+      book: { type: mongoose.Schema.Types.ObjectId, ref: 'Book', required: true },
+      status: {
+        type: String,
+        enum: ["wantToRead", "currentlyReading", "finished"],
+        default: "wantToRead"
+      },
+      addedAt: { type: Date, default: Date.now }
+    }
+  ]
 });
 
 // Hash password before save
@@ -21,9 +32,10 @@ userSchema.pre('save', async function(next){
   }
 });
 
-// Instance method to compare password
+// Compare password
 userSchema.methods.matchPassword = async function(plain){
   return await bcrypt.compare(plain, this.password);
 };
 
 module.exports = mongoose.model('User', userSchema);
+
