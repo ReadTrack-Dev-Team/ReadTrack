@@ -7,7 +7,10 @@ const bookSchema = new mongoose.Schema({
   synopsis: { type: String, default: '' },
   coverUrl: { type: String, default: '' },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  ratingsAverage: { type: Number, default: 0 },
+  ratingsCount: { type: Number, default: 0 }
+
 });
 
 module.exports = mongoose.model('Book', bookSchema);

@@ -27,10 +27,32 @@ exports.createBook = async (req, res) => {
 // GET ALL BOOKS (PUBLIC)
 exports.getBooks = async (req, res) => {
   try {
-    const books = await Book.find().sort({ createdAt: -1 });
-    res.json({ count: books.length, books });
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching books", error: error.message });
+    const { q, author, genre, page = 1, limit = 20, sortBy } = req.query;
+    const filter = {};
+
+    if (q) {
+      // text search on title and synopsis and author
+      const regex = new RegExp(q, 'i');
+      filter.$or = [{ title: regex }, { synopsis: regex }, { author: regex }];
+    }
+    if (author) filter.author = new RegExp(author, 'i');
+    if (genre) filter.genres = { $in: [genre] };
+
+    let query = Book.find(filter);
+
+    // sorting
+    if (sortBy === 'rating') query = query.sort({ ratingsAverage: -1 });
+    else if (sortBy === 'newest') query = query.sort({ createdAt: -1 });
+    else query = query.sort({ title: 1 });
+
+    // pagination
+    const skip = (Number(page) - 1) * Number(limit);
+    query = query.skip(skip).limit(Number(limit));
+
+    const books = await query.exec();
+    res.json(books);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
 
