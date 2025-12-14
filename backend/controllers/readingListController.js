@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const Book = require("../models/Book");
-
+const ReadingList = require("../models/ReadingList");
 // ✅ Add a book to reading list
 exports.addToReadingList = async (req, res) => {
   try {
@@ -118,4 +118,26 @@ exports.getReadingList = async (req, res) => {
     console.error("GetReadingList Error:", error);
     res.status(500).json({ message: error.message });
   }
+};
+
+exports.updateProgress = async (req, res) => {
+  const { bookId, progress } = req.body;
+
+  if (progress < 0 || progress > 100)
+    return res.status(400).json({ message: "Progress must be 0–100" });
+
+  const entry = await ReadingList.findOne({
+    user: req.user.id,
+    book: bookId
+  });
+
+  if (!entry) return res.status(404).json({ message: "Book not found" });
+
+  entry.progress = progress;
+  entry.lastUpdated = Date.now();
+
+  if (progress === 100) entry.status = "finished";
+
+  await entry.save();
+  res.json({ message: "Progress updated", entry });
 };

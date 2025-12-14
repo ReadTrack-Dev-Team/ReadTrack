@@ -3,25 +3,30 @@ const { body } = require('express-validator');
 const router = express.Router();
 const { registerUser, loginUser } = require('../controllers/authController');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
+const { getAllUsers } = require('../controllers/authController');
 
-// Existing routes (KEEP THESE)
-router.post('/register', registerUser);
+// Auth routes
+router.post(
+  '/register',
+  [
+    body('name').notEmpty().withMessage('Name is required'),
+    body('email').isEmail().withMessage('Invalid email'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be 6+ chars')
+  ],
+  registerUser
+);
+
 router.post('/login', loginUser);
 
-// NEW ROUTES FOR MEMBER 3 (ADD THESE BELOW)
+// Member-3 routes
 router.get('/profile', protect, (req, res) => {
-  res.json({ message: "Profile accessed", user: req.user });
+  res.json({ message: 'Profile accessed', user: req.user });
 });
+
+router.get('/admin/users', protect, adminOnly, getAllUsers);
 
 router.get('/admin/check', protect, adminOnly, (req, res) => {
-  res.json({ message: "Admin verified" });
+  res.json({ message: 'Admin verified' });
 });
-
-router.post('/register', [
-  body('name').notEmpty(),
-  body('email').isEmail(),
-  body('password').isLength({ min: 6 })
-], registerUser);
-
 
 module.exports = router;
