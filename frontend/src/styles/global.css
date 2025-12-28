@@ -1,0 +1,234 @@
+body {
+  margin: 0;
+  background: #fdfcf7;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+}
+
+.rt-container {
+  max-width: 1100px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+
+.rt-page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #382110;
+}
+
+.rt-form-card {
+  max-width: 420px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.rt-form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.8rem;
+}
+
+.rt-form-label {
+  font-size: 0.85rem;
+  margin-bottom: 0.2rem;
+  color: #382110;
+}
+
+.rt-form-input,
+.rt-form-textarea {
+  border-radius: 4px;
+  border: 1px solid #c6c0b5;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.rt-form-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.rt-form-error {
+  color: #b12704;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+.rt-book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.rt-book-card {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.rt-book-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.rt-book-cover-wrapper {
+  width: 100%;
+  height: 210px;
+  overflow: hidden;
+  background: #f0ede7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rt-book-cover {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.rt-book-card-body {
+  padding: 0.6rem 0.7rem 0.8rem;
+}
+
+.rt-book-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #382110;
+  margin-bottom: 0.2rem;
+}
+
+.rt-book-author {
+  font-size: 0.8rem;
+  color: #555;
+  margin-bottom: 0.3rem;
+}
+
+.rt-book-rating {
+  font-size: 0.75rem;
+  color: #8a6b3f;
+}
+
+.rt-search-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.rt-search-input {
+  flex: 1;
+}
+
+/* Password Requirements Styles */
+.password-requirements {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: #f9f9f9;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.password-requirements-title {
+  font-size: 0.8rem;
+  color: #555;
+  margin: 0 0 0.5rem 0;
+  font-weight: 500;
+}
+
+.password-requirements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.password-requirement {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  padding: 0.15rem 0;
+  transition: color 0.2s ease;
+}
+
+.password-requirement.met {
+  color: #00875a;
+}
+
+.password-requirement.unmet {
+  color: #b12704;
+}
+
+.requirement-icon {
+  font-weight: bold;
+  width: 14px;
+  text-align: center;
+}
+
+.password-valid-message {
+  color: #00875a;
+  font-size: 0.8rem;
+  margin: 0.5rem 0 0 0;
+  font-weight: 500;
+}
+
+/* Password Toggle Styles */
+.rt-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rt-password-input {
+  flex: 1;
+  padding-right: 2.5rem !important;
+}
+
+.rt-password-toggle {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.rt-password-toggle:hover {
+  opacity: 1;
+}
+
+/* Loading Spinner Styles */
+.rt-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 2rem;
+}
+
+.rt-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f0ede7;
+  border-top-color: #8a6b3f;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
